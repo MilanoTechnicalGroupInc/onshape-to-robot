@@ -5,6 +5,7 @@ from copy import copy
 from robot import RobotURDF, RobotSDF
 import sys
 import os
+import re
 import commentjson as json
 import csg
 
@@ -243,6 +244,8 @@ def addPart(occurrence, matrix):
 
     if prefix in ignore:
         return
+
+    prefix = re.sub('[\\/:]', '_', prefix)
 
     stlFile = prefix+'.stl'
     stl = client.part_studio_stl_m(part['documentId'], part['documentMicroversion'], part['elementId'], 
