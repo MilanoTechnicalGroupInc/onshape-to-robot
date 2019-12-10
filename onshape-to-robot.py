@@ -127,6 +127,8 @@ for feature in features:
         child = data['matedEntities'][0]['matedOccurrence'][0]
         parent = data['matedEntities'][1]['matedOccurrence'][0]
 
+        if data['name'][0:5] == 'link_':
+            occurrenceLinkNames[tuple(data['matedEntities'][0]['matedOccurrence'])] = data['name'][5:]
         if data['name'][0:3] == 'dof':
             parts = data['name'].split('_')
             del parts[0]
