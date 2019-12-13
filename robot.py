@@ -181,7 +181,8 @@ class RobotURDF(Robot):
 
 
     def addJoint(self, linkFrom, linkTo, transform, name, zAxis=[0,0,1]):
-        self.append('<joint name="'+name+'" type="revolute">')
+        jointType = "continuous" if name.find('wheel') > 0 else "revolute"
+        self.append('<joint name="'+name+'" type="'+jointType+'">')
         self.append(origin(transform))
         self.append('<parent link="'+linkFrom+'" />')
         self.append('<child link="'+linkTo+'" />')
