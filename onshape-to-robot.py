@@ -247,8 +247,6 @@ def addPart(occurrence, matrix):
     if prefix in ignore:
         return
 
-    prefix = re.sub('[\\/:]', '_', prefix)
-
     stlFile = prefix+'.stl'
     stl = client.part_studio_stl_m(part['documentId'], part['documentMicroversion'], part['elementId'], 
                                    part['partId'], part['configuration'])
@@ -311,7 +309,7 @@ def extractPartName(name, configuration):
     if configuration != 'default':
         parts += ['_' + configuration.replace('=', '_').replace(' ', '_')]
 
-    return '_'.join(parts).lower()
+    return re.sub('[\\/:,]', '_', '_'.join(parts).lower())
 
 def processPartName(name, configuration):
     global partNames
