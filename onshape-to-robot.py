@@ -35,6 +35,7 @@ drawCollisions = configGet('drawCollisions', False)
 useScads = configGet('useScads', True)
 assemblyName = configGet('assemblyName', False)
 outputFormat = configGet('outputFormat', 'urdf')
+partLevelExport = configGet('partLevelExport', True)
 jointMaxEffort = configGet('jointMaxEffort', 1)
 jointMaxVelocity = configGet('jointMaxVelocity', 20)
 noDynamics = configGet('noDynamics', False)
@@ -82,8 +83,9 @@ def collectParts(instancesToWalk):
 
 root = assembly['rootAssembly']
 collectParts(root['instances'])
-for asm in assembly['subAssemblies']:
-    collectParts(asm['instances'])
+if partLevelExport:
+    for asm in assembly['subAssemblies']:
+        collectParts(asm['instances'])
 
 # Collecting occurences
 occurrences = {}
