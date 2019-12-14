@@ -12,6 +12,7 @@ import random
 import string
 import os
 import json
+import time
 import hashlib
 
 class Client():
@@ -165,6 +166,20 @@ class Client():
 
     def get_assembly(self, did, wid, eid):
         return self._api.request('get', '/api/assemblies/d/'+did+'/w/'+wid+'/e/'+eid, query={'includeMateFeatures': 'true', 'includeMateConnectors': 'true'}).json()
+
+    def get_assembly_dae(self, did, wid, eid):
+        translation = self._api.request('post', '/api/assemblies/d/'+did+'/w/'+wid+'/e/'+eid+'/translations', body={'formatName': 'COLLADA', 'storeInDocument': False})
+        translation = translation.json()
+        request_state = translation['requestState']
+        translation_id = translation['id']
+        while request_state == 'ACTIVE':
+            time.sleep(1)
+            translation = self._api.request('get', '/api/translations/'+translation_id).json()
+            request_state = translation['requestState']
+        if request_state == 'FAILED':
+            return None
+        e_data_id = translation['resultExternalDataIds'][0]
+        return self._api.request('get', '/api/documents/d/'+did+'/externaldata/'+e_data_id).content
 
     def get_features(self, did, wid, eid):
         '''
